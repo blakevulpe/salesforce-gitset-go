@@ -4,6 +4,10 @@
   "description": "A VS Code extension for Salesforce that pulls custom settings data into VS Code.",
   "version": "1.0.0",
   "publisher": "blakevulpe",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blakevulpe/salesforce-gitset-go"
+  },
   "engines": {
     "vscode": "^1.105.0"
   },
