@@ -1,0 +1,74 @@
+{
+  "name": "salesforce-gitset-go",
+  "displayName": "Salesforce GitSet Go",
+  "description": "A VS Code extension for Salesforce that pulls custom settings data into VS Code.",
+  "version": "1.0.0",
+  "publisher": "blakevulpe",
+  "engines": {
+    "vscode": "^1.105.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "enabledApiProposals": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "salesforce-gitset-go.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "salesforce-gitset-go.showCustomSettings",
+        "title": "GitSet Go: Show Custom Settings"
+      },
+      {
+        "command": "salesforce-gitset-go.retrieveCustomSettingsData",
+        "title": "GitSet Go: Retrieve Custom Settings Data"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "salesforce-gitset-go.retrieveCustomSettingsData",
+          "when": "resourceFilename == custom-settings.yaml",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "update-proposed-api": "vscode-dts dev"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.105.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/js-yaml": "^4.0.9",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "eslint": "^9.36.0",
+    "esbuild": "^0.25.10",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "vscode-dts": "^0.3.3"
+  }
+}
