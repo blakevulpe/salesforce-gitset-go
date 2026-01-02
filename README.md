@@ -54,4 +54,8 @@ This is the first version of the extention. I'll likely add more functionality a
 
 Initial release of Salesforce GitSet Go
 
+### 1.0.1
+
+changed the Custom Settings selection interface to a page and added a search box. 
+
 **Enjoy!**
