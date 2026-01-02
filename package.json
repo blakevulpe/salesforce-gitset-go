@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://github.com/blakevulpe/salesforce-gitset-go"
   },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.105.0"
   },
