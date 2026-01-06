@@ -1,3 +1,9 @@
+## Scope
+
+This is an extension I built for my Dev Teams. We use a series of GitHub Actions to deploy Salesforce and Vlocity changes through our Salesforce environments. We recently implemented a way to deploy Custom Settings with our Git Tool, however the dev teams had to run manual commands in VS Code to retrieve the Custom Setting records and commit them to our GitHub repo. This tools makes life easier and quicker for our teams so they can use the extension interface to retrieve the records and commit them to a new feature branch.
+
+I may add other functionality to this some day. Not sure. Feel free to give any ideas.
+
 ## Features
 
 GitSet Go: Show Custom Settings - This command retrieves a list of Custom Setting types into your command bar so you can select which Custom Settings you'd like to import and loads it into a file called force-app\main\default\.custom-settings\custom-settings.yaml (notice the . in the .custom-settings folder name)
