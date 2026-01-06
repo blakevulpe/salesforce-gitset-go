@@ -6,43 +6,16 @@ I may add other functionality to this some day. Not sure. Feel free to give any 
 
 ## Features
 
-GitSet Go: Show Custom Settings - This command retrieves a list of Custom Setting types into your command bar so you can select which Custom Settings you'd like to import and loads it into a file called force-app\main\default\.custom-settings\custom-settings.yaml (notice the . in the .custom-settings folder name)
+GitSet Go: Show Custom Settings - This command pulls up a page that shows all the Custom Setting types. From this page, you check whichever Custom Setting types you would like to deploy. You can use the search box to find the specific Custom Settings type you want. You can select more than one.
 
-i.e.
-CustomSettingsDataKeys:
-  - My_Custom_Setting__c
-  - My_Other_Custom_Setting__c
+Once you have the types you want selected, Click Retrieve.
+This opens up all Custom Settings records of the types selected in the right hand column. Select the specific records you would like to add or update in your feature branch.
 
-GitSet Go: Retrieve Custom Settings Data - This command retrieves all Custom Settings records for the Custom Setting Types listed in the custom-settings.yaml and loads them into a folder structure in force-app\main\default\custom-settings (notice the lack of a . in the custom-settings folder name). It should product a folder named via the Custom Setting API name with 2 files in it. One, the json with the data and 2 a plan.json which just lists the files generated.
+Click Save + Retrieve Selected Records
 
-i.e.
-force-app\main\default\custom-settings\My_Custom_Setting__c\My_Custom_Setting__c.json
-{
-    "records": [
-        {
-            "attributes": {
-                "type": "My_Custom_Setting__c",
-                "referenceId": "My_Custom_Setting__cRef1"
-            },
-            "Name": "Setting1",
-            "Client_Name__c": "my_client",
-            "Description__c": "The name of my client.",
-            "Method__c": "distributor",
-            "System_Domain__c": "myClient.com"
-        },
-        {
-            "attributes": {
-                "type": "My_Custom_Setting__c",
-                "referenceId": "My_Custom_Setting__cRef2"
-            },
-            "Name": "Setting2",
-            "Client_Name__c": "my_other_client",
-            "Description__c": "The name of my other client.",
-            "Method__c": "importer",
-            "System_Domain__c": "myotherClient.com"
-        }
-    ]
-}
+This does 2 things. First, it creates a custom-setting.yaml in the force-app\main\default\.custom-settings\custom-settings.yaml (not the . at the beginning of custom-settings folder name). Much like a package.xml, this yaml will indicate which Custom Setting types and Records you’d like to deploy. Only what is noted in the custom-settings.yaml will deploy.
+
+Second, it will create (or update) a folder for each Custom Settings type in the force-app\main\default\custom-settings folder (note the LACK of a . at the beginning of the custom-settings folder name). With each subfolder will be 2 files: a .json and a plan.json. The .json will have all records for that custom setting type (not just what you select).
 
 ## Requirements
 
