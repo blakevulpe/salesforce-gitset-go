@@ -58,4 +58,8 @@ Initial release of Salesforce GitSet Go
 
 changed the Custom Settings selection interface to a page and added a search box. 
 
+### 1.0.2
+
+Added an Icon for the extension. 
+
 **Enjoy!**
