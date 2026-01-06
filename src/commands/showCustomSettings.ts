@@ -1,6 +1,13 @@
 import * as vscode from 'vscode';
 import { fetchCustomSettings, fetchRecordsForType } from '../services/salesforceService';
-import { getYamlFilePath, readCustomSettingsYaml, updateSettingsInYaml, ensureCustomSettingDirectory } from '../services/yamlService';
+import {
+	getYamlFilePath,
+	readCustomSettingsYaml,
+	readCustomSettingsSelection,
+	updateSettingsInYaml,
+	writeCustomSettingsSelection,
+	ensureCustomSettingDirectory
+} from '../services/yamlService';
 import { getWebviewContent } from '../ui/customSettingsWebview';
 import { retrieveSelectedRecords } from './retrieveCustomSettingsData';
 
@@ -43,7 +50,8 @@ export async function showCustomSettingsCommand(context: vscode.ExtensionContext
 
 	// Read existing YAML file to get already selected settings
 	const yamlFilePath = getYamlFilePath(workspaceRoot);
-	const existingSettings = readCustomSettingsYaml(yamlFilePath);
+	const selection = readCustomSettingsSelection(yamlFilePath);
+	const existingSettings = selection.CustomSettingsDataKeys;
 
 	// Create and show the WebView panel
 	const panel = vscode.window.createWebviewPanel(
@@ -66,11 +74,11 @@ export async function showCustomSettingsCommand(context: vscode.ExtensionContext
 				case 'fetchRecords':
 					await handleFetchRecords(panel, message.types);
 					break;
-				
+
 				case 'retrieveSelectedRecords':
 					await handleRetrieveSelectedRecords(panel, workspaceRoot, message.records);
 					break;
-				
+
 				case 'saveSettings':
 					await handleSaveSettings(panel, workspaceRoot, message.settings);
 					break;
@@ -112,14 +120,28 @@ async function handleRetrieveSelectedRecords(
 	recordsToRetrieve: { type: string; recordIds: string[] }[]
 ): Promise<void> {
 	try {
-		// First, save the selected types to the YAML file
-		const selectedTypes = recordsToRetrieve.map(r => r.type);
 		const yamlFilePath = getYamlFilePath(workspaceRoot);
-		updateSettingsInYaml(yamlFilePath, selectedTypes);
-		
-		// Now retrieve the selected records
-		const { successCount, errorCount } = await retrieveSelectedRecords(workspaceRoot, recordsToRetrieve);
-		
+
+		// Persist both types + selected record Ids
+		const selectedTypes = recordsToRetrieve.map(r => r.type);
+		const recordNameMap: Record<string, string[]> = {};
+		for (const r of recordsToRetrieve) {
+			recordNameMap[r.type] = r.recordIds;
+		}
+
+		// Replace (not merge) record selection for the selected types.
+		// This ensures unchecked records are removed from YAML on save.
+		writeCustomSettingsSelection(yamlFilePath, {
+			CustomSettingsDataKeys: selectedTypes,
+			CustomSettingsRecordNames: recordNameMap
+		});
+
+		// Retrieve the selected types (all records for each type)
+		const { successCount, errorCount } = await retrieveSelectedRecords(
+			workspaceRoot,
+			recordsToRetrieve.map(r => ({ type: r.type, recordIds: [] }))
+		);
+
 		// Show success message
 		if (errorCount === 0) {
 			vscode.window.showInformationMessage(
@@ -130,7 +152,7 @@ async function handleRetrieveSelectedRecords(
 				`Retrieved ${successCount} type(s), but ${errorCount} failed.`
 			);
 		}
-		
+
 		// Close the panel
 		panel.dispose();
 	} catch (error) {

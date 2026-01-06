@@ -30,13 +30,19 @@ export async function fetchCustomSettings(): Promise<string[]> {
 }
 
 /**
- * Fetch records for a specific custom setting type
+ * Fetch records for a specific custom setting type.
+ *
+ * Notes:
+ * - List custom settings commonly have Name.
+ * - Hierarchy custom settings often don't; they use SetupOwnerId.
  */
-export async function fetchRecordsForType(settingType: string): Promise<any[]> {
+export async function fetchRecordsForType(
+	settingType: string
+): Promise<Array<{ Id: string; Name?: string; SetupOwnerId?: string }>> {
 	try {
-		const query = `SELECT Id, Name FROM ${settingType}`;
+		const query = `SELECT Id, Name, SetupOwnerId FROM ${settingType}`;
 		const { stdout } = await execAsync(`sf data query --query "${query}" --json`);
-		
+
 		const result = JSON.parse(stdout);
 		if (result.status === 0 && result.result && result.result.records) {
 			return result.result.records;

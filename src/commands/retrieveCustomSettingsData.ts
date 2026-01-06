@@ -1,7 +1,12 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { fetchFieldsForSetting, exportCustomSettingData } from '../services/salesforceService';
-import { getYamlFilePath, readCustomSettingsYaml, ensureCustomSettingDirectory } from '../services/yamlService';
+import {
+	getYamlFilePath,
+	readCustomSettingsYaml,
+	readCustomSettingsSelection,
+	ensureCustomSettingDirectory
+} from '../services/yamlService';
 
 /**
  * Command handler for retrieving custom settings data
@@ -44,7 +49,8 @@ export async function retrieveCustomSettingsDataCommand(uri?: vscode.Uri): Promi
 		}
 
 		// Parse the YAML file
-		const customSettings = readCustomSettingsYaml(yamlFilePath);
+		const selection = readCustomSettingsSelection(yamlFilePath);
+		const customSettings = selection.CustomSettingsDataKeys;
 
 		if (customSettings.length === 0) {
 			vscode.window.showInformationMessage('No Custom Settings found in custom-settings.yaml.');
@@ -65,7 +71,7 @@ export async function retrieveCustomSettingsDataCommand(uri?: vscode.Uri): Promi
 				// Define output directory
 				const outputDir = ensureCustomSettingDirectory(workspaceRoot, settingName);
 
-				// Execute data export command
+				// Execute data export command (always retrieve all records for the type)
 				await exportCustomSettingData(settingName, fields, outputDir);
 
 				successCount++;
@@ -119,13 +125,12 @@ export async function retrieveSelectedRecords(
 			// Fetch field names using Tooling API
 			const fields = await fetchFieldsForSetting(settingName);
 
-			// Build WHERE clause for selected records
-			const whereClause = `Id IN ('${recordIds.join("','")}')`;
-
 			// Define output directory
 			const outputDir = ensureCustomSettingDirectory(workspaceRoot, settingName);
 
 			// Execute data export command
+			// If recordIds were provided, filter; otherwise retrieve all records for the type.
+			const whereClause = recordIds.length > 0 ? `Id IN ('${recordIds.join("','")}')` : undefined;
 			await exportCustomSettingData(settingName, fields, outputDir, whereClause);
 
 			successCount++;

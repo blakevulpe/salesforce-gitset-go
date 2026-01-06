@@ -27,20 +27,10 @@
       {
         "command": "salesforce-gitset-go.showCustomSettings",
         "title": "GitSet Go: Show Custom Settings"
-      },
-      {
-        "command": "salesforce-gitset-go.retrieveCustomSettingsData",
-        "title": "GitSet Go: Retrieve Custom Settings Data"
       }
     ],
     "menus": {
-      "explorer/context": [
-        {
-          "command": "salesforce-gitset-go.retrieveCustomSettingsData",
-          "when": "resourceFilename == custom-settings.yaml",
-          "group": "navigation"
-        }
-      ]
+      "explorer/context": []
     }
   },
   "scripts": {
