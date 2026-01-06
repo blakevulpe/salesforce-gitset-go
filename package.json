@@ -2,7 +2,8 @@
   "name": "salesforce-gitset-go",
   "displayName": "Salesforce GitSet Go",
   "description": "A VS Code extension for Salesforce that pulls custom settings data into VS Code.",
-  "version": "1.0.1",
+  "version": "1.0.2",
+  "icon": "icon.png",
   "publisher": "blakevulpe",
   "repository": {
     "type": "git",
@@ -20,10 +21,6 @@
   "enabledApiProposals": [],
   "contributes": {
     "commands": [
-      {
-        "command": "salesforce-gitset-go.helloWorld",
-        "title": "Hello World"
-      },
       {
         "command": "salesforce-gitset-go.showCustomSettings",
         "title": "GitSet Go: Show Custom Settings"
