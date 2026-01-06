@@ -10,4 +10,5 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### 1.0.1
 
-- changed interface for selecting Custom Settings types and added a search box.
+- changed interface for selecting Custom Settings types and added a search box. 
+- Now you can select the specific settings you want listed in the custom-settings.yaml
